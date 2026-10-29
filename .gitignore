@@ -14,3 +14,6 @@ dist/
 Thumbs.db
 
 
+/build/
+/.mygo/
+mygo_windows_*.syso
