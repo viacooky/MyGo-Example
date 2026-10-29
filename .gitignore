@@ -1,0 +1,16 @@
+.vfox/
+.agents/
+
+# 构建产物
+bin/
+dist/
+*.exe
+*.test
+*.out
+
+
+# 编辑器与系统文件
+.DS_Store
+Thumbs.db
+
+
