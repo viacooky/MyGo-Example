@@ -2,5 +2,6 @@
   "name": "MyGo-Learn",
   "identifier": "com.example.myapp",
   "version": "0.1.0",
+  "main": "./cmd/gui",
   "out": "dist"
 }

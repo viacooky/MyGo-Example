@@ -6,7 +6,7 @@
       "type": "go",
       "request": "launch",
       "mode": "debug",
-      "program": "${workspaceFolder}",
+      "program": "${workspaceFolder}/cmd/gui",
       "env": {
         "MYGO_ENV": "development"
       },
@@ -24,7 +24,7 @@
       "type": "go",
       "request": "launch",
       "mode": "test",
-      "program": "${workspaceFolder}",
+      "program": "${workspaceFolder}/internal/app",
       "env": {
         "MYGO_ENV": "development"
       }
