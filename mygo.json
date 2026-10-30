@@ -1,5 +1,5 @@
 {
-  "name": "MyGo-Learn",
+  "name": "MyGo-Example",
   "identifier": "com.example.myapp",
   "version": "0.1.0",
   "main": "./cmd/gui",

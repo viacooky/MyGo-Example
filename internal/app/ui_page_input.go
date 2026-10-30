@@ -121,7 +121,7 @@ func (app *app) pageInput(c *ui.Context) {
 					Children(func() {
 						timeStr := app.pageInputData.TimeField.Format("2006-01-02 15:04:05")
 						ui.Text(c, fmt.Sprintf("Time: %s", timeStr))
-						ui.Text(c, "暂时不能修改控件中的日期/时间格式").TextColor(ui.RGB(255, 0, 0))
+						ui.Text(c, "暂时不能修改控件中的日期/时间格式").TextColor(ui.Hex("#FF0000"))
 					})
 
 				if app.pageInputData.TimeField.IsZero() {

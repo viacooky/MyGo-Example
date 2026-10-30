@@ -14,5 +14,8 @@ func (app *app) pageHome(c *ui.Context) {
 		if ui.Button(c, "Input").Clicked() {
 			app.router.Push("/input")
 		}
+		if ui.Button(c, "List").Clicked() {
+			app.router.Push("/list")
+		}
 	})
 }

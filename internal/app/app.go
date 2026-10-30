@@ -25,7 +25,9 @@ type app struct {
 
 	lastTrayClick time.Time // 托盘上一次单击的时间，只在主线程访问
 
+	// 页面数据
 	pageInputData pageInputData
+	pageListData  pageListData
 }
 
 func Run() error {

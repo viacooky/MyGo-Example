@@ -59,13 +59,16 @@ func (app *app) setSidebar(c *ui.Context) {
 	page := app.router.Path()
 	ui.Sidebar(c, &page, func() {
 		ui.SidebarItem(c, "/home", icons.Home, "首页")
-		ui.SidebarItem(c, "/text", icons.Save, "Text")
-		ui.SidebarItem(c, "/input", icons.Check, "Input")
-	}).
-		Width(200).
-		OnChange(func() {
-			app.router.Push(page)
+		ui.SidebarSection(c, "常用", nil, func() {
+			ui.SidebarItem(c, "/text", icons.Save, "Text")
+			ui.SidebarItem(c, "/input", icons.Check, "Input")
 		})
+		ui.SidebarSection(c, "数据展示", nil, func() {
+			ui.SidebarItem(c, "/list", icons.Braces, "List")
+		})
+	}).Width(200).OnChange(func() {
+		app.router.Push(page)
+	})
 }
 
 // setRouter 设置路由 对应sidebar的路径
@@ -78,6 +81,8 @@ func (app *app) setRouter(c *ui.Context) {
 			app.pageText(c)
 		case r.Match("/input"):
 			app.pageInput(c)
+		case r.Match("/list"):
+			app.pageList(c)
 		default:
 			ui.Text(c, "Not found")
 		}
