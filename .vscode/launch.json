@@ -1,0 +1,33 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug my-app",
+      "type": "go",
+      "request": "launch",
+      "mode": "debug",
+      "program": "${workspaceFolder}",
+      "env": {
+        "MYGO_ENV": "development"
+      },
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Attach to my-app",
+      "type": "go",
+      "request": "attach",
+      "mode": "local",
+      "processId": "${command:pickGoProcess}"
+    },
+    {
+      "name": "Debug view test",
+      "type": "go",
+      "request": "launch",
+      "mode": "test",
+      "program": "${workspaceFolder}",
+      "env": {
+        "MYGO_ENV": "development"
+      }
+    }
+  ]
+}

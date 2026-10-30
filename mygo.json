@@ -1,6 +1,6 @@
 {
-  "name": "my-app",
+  "name": "MyGo-Learn",
   "identifier": "com.example.myapp",
   "version": "0.1.0",
-  "out": "build"
+  "out": "dist"
 }
