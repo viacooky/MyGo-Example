@@ -57,7 +57,7 @@ func main() {
 
 func (app *app) pageDocument(c *ui.Context) {
 	ui.Row(c).Children(func() {
-		ui.Text(c, "Document").FontSize(PageTitleFontSize).Margin(PageTitleBarMargin).Bold()
+		app.breadcrumbTitle(c, "Document")
 	})
 	ui.Scroll(c).Fill().Padding(0, 16, 64, 16).ScrollbarInsets(0, 0, 20).Children(func() {
 		ui.Column(c).Margin(PageTitleBarMargin).Children(func() {

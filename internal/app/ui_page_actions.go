@@ -18,7 +18,7 @@ type pageActionsData struct {
 
 func (app *app) pageActions(c *ui.Context) {
 	ui.Row(c).Children(func() {
-		ui.Text(c, "Actions").FontSize(PageTitleFontSize).Margin(PageTitleBarMargin).Bold()
+		app.breadcrumbTitle(c, "Actions")
 	})
 	ui.Scroll(c).Fill().Padding(0, 16, 64, 16).ScrollbarInsets(0, 0, 20).Children(func() {
 		ui.Grid(c).Margin(PageTitleBarMargin).

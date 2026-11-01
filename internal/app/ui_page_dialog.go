@@ -10,57 +10,18 @@ import (
 )
 
 type pageDialogData struct {
-	DialogOpen bool
-	AlertOpen  bool
-	Name       string
-	LastAction string
-	Files      []string // 最近一次选择的文件
-	Directory  string   // 最近一次选择的目录
-	SavePath   string   // 最近一次选择的保存路径
+	Files     []string // 最近一次选择的文件
+	Directory string   // 最近一次选择的目录
+	SavePath  string   // 最近一次选择的保存路径
+	Message   string   // 最近一次消息对话框的结果
+	Error     string   // 最近一次错误对话框的结果
 }
 
 func (app *app) pageDialog(c *ui.Context) {
 	ui.Row(c).Children(func() {
-		ui.Text(c, "Dialog").FontSize(PageTitleFontSize).Margin(PageTitleBarMargin).Bold()
+		app.breadcrumbTitle(c, "Dialog")
 	})
 	ui.Scroll(c).Fill().Padding(0, 16, 64, 16).ScrollbarInsets(0, 0, 20).Children(func() {
-		ui.Grid(c).Margin(PageTitleBarMargin).
-			GapX(16).GapY(8).
-			ColumnTracks(ui.FitContent(), ui.Fr(1)).
-			AlignItems(ui.Baseline).
-			Children(func() {
-				ui.Text(c, "Dialog").FontSize(16).Bold()
-				ui.Column(c).Margin(PageTitleBarMargin).Children(func() {
-					ui.Text(c, fmt.Sprintf("对话框打开: %t", app.pageDialogData.DialogOpen))
-					ui.Text(c, fmt.Sprintf("最近操作: %s", app.pageDialogData.LastAction))
-				})
-
-				ui.Text(c, "ui.Modal")
-				if ui.Button(c, "打开对话框").Clicked() {
-					app.pageDialogData.DialogOpen = true
-				}
-			})
-
-		ui.Divider(c)
-
-		ui.Grid(c).Margin(PageTitleBarMargin).
-			GapX(16).GapY(8).
-			ColumnTracks(ui.FitContent(), ui.Fr(1)).
-			AlignItems(ui.Baseline).
-			Children(func() {
-				ui.Text(c, "AlertDialog").FontSize(16).Bold()
-				ui.Column(c).Margin(PageTitleBarMargin).Children(func() {
-					ui.Text(c, fmt.Sprintf("确认框打开: %t", app.pageDialogData.AlertOpen))
-				})
-
-				ui.Text(c, "ui.AlertDialog")
-				if ui.Button(c, "删除…").Clicked() {
-					app.pageDialogData.AlertOpen = true
-				}
-			})
-
-		ui.Divider(c)
-
 		ui.Grid(c).Margin(PageTitleBarMargin).
 			GapX(16).GapY(8).
 			ColumnTracks(ui.FitContent(), ui.Fr(1)).
@@ -112,32 +73,43 @@ func (app *app) pageDialog(c *ui.Context) {
 					go app.saveFile()
 				}
 			})
-	})
 
-	// 对话框是覆盖层，放在页面内容之后构建
-	ui.Modal(c, &app.pageDialogData.DialogOpen, func() {
-		ui.Text(c, "重命名").FontSize(18).Bold()
-		ui.Text(c, "输入新的名称。").TextColor(c.Theme().TextMuted)
-		ui.TextInput(c, &app.pageDialogData.Name).AutoFocus()
-		ui.Row(c).Gap(8).Justify(ui.End).Children(func() {
-			if ui.Button(c, "取消").Clicked() {
-				app.pageDialogData.DialogOpen = false
-			}
-			if ui.PrimaryButton(c, "确定").Clicked() {
-				app.pageDialogData.LastAction = fmt.Sprintf("重命名为 %q", app.pageDialogData.Name)
-				app.pageDialogData.DialogOpen = false
-			}
-		})
-	})
+		ui.Divider(c)
 
-	switch ui.AlertDialog(c, &app.pageDialogData.AlertOpen, "删除这条记录？", "删除后无法恢复。", "取消", "删除") {
-	case ui.AlertDismissed:
-		app.pageDialogData.LastAction = "已取消删除"
-	case 0:
-		app.pageDialogData.LastAction = "已取消删除"
-	case 1:
-		app.pageDialogData.LastAction = "已删除"
-	}
+		ui.Grid(c).Margin(PageTitleBarMargin).
+			GapX(16).GapY(8).
+			ColumnTracks(ui.FitContent(), ui.Fr(1)).
+			AlignItems(ui.Baseline).
+			Children(func() {
+				ui.Text(c, "Message").FontSize(16).Bold()
+				ui.Column(c).Margin(PageTitleBarMargin).Children(func() {
+					ui.Text(c, fmt.Sprintf("结果: %s", orNone(app.pageDialogData.Message)))
+				})
+
+				ui.Text(c, "mygo.Dialog.Message")
+				if ui.Button(c, "显示消息…").JustifySelf(ui.Start).Clicked() {
+					go app.showMessage()
+				}
+			})
+
+		ui.Divider(c)
+
+		ui.Grid(c).Margin(PageTitleBarMargin).
+			GapX(16).GapY(8).
+			ColumnTracks(ui.FitContent(), ui.Fr(1)).
+			AlignItems(ui.Baseline).
+			Children(func() {
+				ui.Text(c, "Error").FontSize(16).Bold()
+				ui.Column(c).Margin(PageTitleBarMargin).Children(func() {
+					ui.Text(c, fmt.Sprintf("结果: %s", orNone(app.pageDialogData.Error)))
+				})
+
+				ui.Text(c, "mygo.Dialog.Message (MessageError)")
+				if ui.Button(c, "显示错误…").JustifySelf(ui.Start).Clicked() {
+					go app.showError()
+				}
+			})
+	})
 }
 
 // pickFiles 在后台打开系统的文件选择框，选择结果交回主线程写入页面状态
@@ -185,6 +157,45 @@ func (app *app) saveFile() {
 		return
 	}
 	app.window.Update(func() { app.pageDialogData.SavePath = path })
+}
+
+// showMessage 在后台弹出系统的消息对话框，结果交回主线程
+func (app *app) showMessage() {
+	res, err := mygo.Dialog.Message(mygo.MessageOptions{
+		Parent:  app.window,
+		Type:    mygo.MessageInfo,
+		Title:   "提示",
+		Message: "操作已完成。",
+		Detail:  "这里是放在小字里的详细说明。",
+	})
+	if err != nil {
+		slog.Error(fmt.Sprintf("消息对话框: %v", err))
+		return
+	}
+	result := fmt.Sprintf("点击了第 %d 个按钮", res.Button+1)
+	app.window.Update(func() { app.pageDialogData.Message = result })
+}
+
+// showError 在后台弹出系统的错误对话框，并区分“重试”与“取消”
+func (app *app) showError() {
+	res, err := mygo.Dialog.Message(mygo.MessageOptions{
+		Parent:       app.window,
+		Type:         mygo.MessageError,
+		Title:        "出错了",
+		Message:      "无法写入文件。",
+		Detail:       "请检查磁盘空间与文件权限后重试。",
+		Buttons:      []string{"重试", "取消"},
+		CancelButton: 1,
+	})
+	if err != nil {
+		slog.Error(fmt.Sprintf("错误对话框: %v", err))
+		return
+	}
+	action := "取消"
+	if res.Button == 0 {
+		action = "重试"
+	}
+	app.window.Update(func() { app.pageDialogData.Error = action })
 }
 
 // orNone 在未选择内容时返回占位符

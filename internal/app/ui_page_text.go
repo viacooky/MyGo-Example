@@ -6,7 +6,7 @@ import (
 
 func (app *app) pageText(c *ui.Context) {
 	ui.Row(c).Children(func() {
-		ui.Text(c, "Text").FontSize(PageTitleFontSize).Margin(PageTitleBarMargin).Bold()
+		app.breadcrumbTitle(c, "Text")
 	})
 
 	ui.Grid(c).Margin(PageTitleBarMargin).

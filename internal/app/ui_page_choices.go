@@ -7,6 +7,8 @@ import (
 )
 
 type pageChoicesData struct {
+	initialized bool
+
 	ComboboxField string
 	TokensField   []string
 
@@ -22,8 +24,18 @@ type pageChoicesData struct {
 }
 
 func (app *app) pageChoices(c *ui.Context) {
+	d := &app.pageChoicesData
+	if !d.initialized {
+		d.Size = "中"
+		d.Volume = 50
+		d.MinPrice = 200
+		d.MaxPrice = 800
+		d.Copies = 1
+		d.Stars = 3
+		d.initialized = true
+	}
 	ui.Row(c).Children(func() {
-		ui.Text(c, "Choices").FontSize(PageTitleFontSize).Margin(PageTitleBarMargin).Bold()
+		app.breadcrumbTitle(c, "Choices")
 	})
 	ui.Scroll(c).Fill().Padding(0, 16, 64, 16).ScrollbarInsets(0, 0, 20).Children(func() {
 		ui.Grid(c).Margin(PageTitleBarMargin).

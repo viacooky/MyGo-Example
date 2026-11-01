@@ -14,7 +14,7 @@ type pageMessageData struct {
 
 func (app *app) pageMessage(c *ui.Context) {
 	ui.Row(c).Children(func() {
-		ui.Text(c, "Message").FontSize(PageTitleFontSize).Margin(PageTitleBarMargin).Bold()
+		app.breadcrumbTitle(c, "Message")
 	})
 	ui.Scroll(c).Fill().Padding(0, 16, 64, 16).ScrollbarInsets(0, 0, 20).Children(func() {
 		ui.Grid(c).Margin(PageTitleBarMargin).

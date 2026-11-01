@@ -9,6 +9,8 @@ import (
 )
 
 type pageStatusData struct {
+	initialized bool
+
 	Progress    float64 // 下载进度，0 到 1
 	Speed       float64 // 下载速度，MB/s
 	Downloaded  float64 // 已下载，MB
@@ -25,8 +27,15 @@ type pageStatusData struct {
 const downloadSize = 20.0 // 模拟文件大小，MB
 
 func (app *app) pageStatus(c *ui.Context) {
+	d := &app.pageStatusData
+	if !d.initialized {
+		d.DiskUsed = 68
+		d.Unread = 3
+		d.initialized = true
+	}
+
 	ui.Row(c).Children(func() {
-		ui.Text(c, "Status").FontSize(PageTitleFontSize).Margin(PageTitleBarMargin).Bold()
+		app.breadcrumbTitle(c, "Status")
 	})
 	ui.Scroll(c).Fill().Padding(0, 16, 64, 16).ScrollbarInsets(0, 0, 20).Children(func() {
 		ui.Grid(c).Margin(PageTitleBarMargin).

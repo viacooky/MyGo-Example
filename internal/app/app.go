@@ -23,18 +23,36 @@ type app struct {
 	window *mygo.Window // 主窗口
 	router *ui.Router   // 页面路由
 
+	breadcrumbChosen int // 标题面包屑当前选中的层级，页面标题统一使用
+
 	lastTrayClick time.Time // 托盘上一次单击的时间，只在主线程访问
 
-	// 页面数据
-	pageInputData    pageInputData
-	pageListData     pageListData
-	pageActionsData  pageActionsData
-	pageChoicesData  pageChoicesData
-	pageCodeData     pageCodeData
-	pageDocumentData pageDocumentData
-	pageDialogData   pageDialogData
-	pageMessageData  pageMessageData
-	pageStatusData   pageStatusData
+	// 页面数据，由各页面在首次构建时初始化
+	pageInputData        pageInputData
+	pageListData         pageListData
+	pageActionsData      pageActionsData
+	pageChoicesData      pageChoicesData
+	pageCodeData         pageCodeData
+	pageDocumentData     pageDocumentData
+	pageDialogData       pageDialogData
+	pageDragDropData     pageDragDropData
+	pageGridViewData     pageGridViewData
+	pageMessageData      pageMessageData
+	pageModalData        pageModalData
+	pageNotificationData pageNotificationData
+	pageClipboardData    pageClipboardData
+	pageShellData        pageShellData
+	pageShortcutData     pageShortcutData
+	pageOutlineData      pageOutlineData
+	pageStatusData       pageStatusData
+	pageTableData        pageTableData
+	pageTreeData         pageTreeData
+
+	pageAudioData    pageAudioData
+	pageAvatarData   pageAvatarData
+	pageChartsData   pageChartsData
+	pageImageData    pageImageData
+	pageTerminalData pageTerminalData
 }
 
 func Run() error {
@@ -51,30 +69,16 @@ func Run() error {
 			Content:       ui.View(app.view),
 		})
 		app.setupTray()
-
+		mygo.App.OnWillQuit(func(*mygo.QuitEvent) { app.closeTerminal() })
 	})
 
 	return mygo.App.Run()
 }
 
 func New() *app {
-	app := &app{
+	return &app{
 		router: ui.NewRouter("/home"),
-		pageChoicesData: pageChoicesData{
-			Size:     "中",
-			Volume:   50,
-			MinPrice: 200,
-			MaxPrice: 800,
-			Copies:   1,
-			Stars:    3,
-		},
-		pageStatusData: pageStatusData{
-			DiskUsed: 68,
-			Unread:   3,
-		},
 	}
-
-	return app
 }
 
 // setupTray 创建托盘图标：最小化时把窗口隐藏到托盘，可从托盘的菜单恢复或退出

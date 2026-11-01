@@ -41,7 +41,7 @@ func (app *app) pageList(c *ui.Context) {
 	}
 
 	ui.Row(c).Children(func() {
-		ui.Text(c, "列表").FontSize(PageTitleFontSize).Margin(PageTitleBarMargin).Bold()
+		app.breadcrumbTitle(c, "列表")
 	})
 
 	ui.Scroll(c).Fill().Padding(0, 16, 64, 16).ScrollbarInsets(0, 0, 20).Children(func() {
