@@ -62,9 +62,18 @@ func (app *app) setSidebar(c *ui.Context) {
 		ui.SidebarSection(c, "常用", nil, func() {
 			ui.SidebarItem(c, "/text", icons.Save, "Text")
 			ui.SidebarItem(c, "/input", icons.Check, "Input")
+			ui.SidebarItem(c, "/choices", icons.Chevron, "Choices")
+			ui.SidebarItem(c, "/actions", icons.Sliders, "Actions")
 		})
 		ui.SidebarSection(c, "数据展示", nil, func() {
 			ui.SidebarItem(c, "/list", icons.Braces, "List")
+			ui.SidebarItem(c, "/document", icons.Doc, "Document")
+			ui.SidebarItem(c, "/code", icons.File, "Code")
+		})
+		ui.SidebarSection(c, "反馈", nil, func() {
+			ui.SidebarItem(c, "/status", icons.Bolt, "Status")
+			ui.SidebarItem(c, "/message", icons.Alert, "Message")
+			ui.SidebarItem(c, "/dialog", icons.Monitor, "Dialog")
 		})
 	}).Width(200).OnChange(func() {
 		app.router.Push(page)
@@ -81,8 +90,22 @@ func (app *app) setRouter(c *ui.Context) {
 			app.pageText(c)
 		case r.Match("/input"):
 			app.pageInput(c)
+		case r.Match("/choices"):
+			app.pageChoices(c)
+		case r.Match("/actions"):
+			app.pageActions(c)
 		case r.Match("/list"):
 			app.pageList(c)
+		case r.Match("/code"):
+			app.pageCode(c)
+		case r.Match("/document"):
+			app.pageDocument(c)
+		case r.Match("/status"):
+			app.pageStatus(c)
+		case r.Match("/message"):
+			app.pageMessage(c)
+		case r.Match("/dialog"):
+			app.pageDialog(c)
 		default:
 			ui.Text(c, "Not found")
 		}

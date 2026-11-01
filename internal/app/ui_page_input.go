@@ -9,13 +9,11 @@ import (
 )
 
 type pageInputData struct {
-	TextField     string
-	EditableText  string
-	NumberField   float64
-	ComboboxField string
-	TokensField   []string
-	TimeField     time.Time
-	ColorField    ui.Color
+	TextField    string
+	EditableText string
+	NumberField  float64
+	TimeField    time.Time
+	ColorField   ui.Color
 }
 
 func (app *app) pageInput(c *ui.Context) {
@@ -81,32 +79,6 @@ func (app *app) pageInput(c *ui.Context) {
 
 				ui.Text(c, "NumberInput")
 				ui.NumberInput(c, &app.pageInputData.NumberField, 1, 99, 0.1)
-			})
-
-		ui.Divider(c)
-
-		ui.Grid(c).Margin(PageTitleBarMargin).
-			GapX(16).GapY(8).
-			ColumnTracks(ui.FitContent(), ui.Fr(1)).
-			AlignItems(ui.Baseline).
-			Children(func() {
-				ui.Text(c, "Combobox").FontSize(16).Bold()
-				ui.Column(c).Margin(PageTitleBarMargin).
-					Children(func() {
-						ui.Text(c, fmt.Sprintf("选择的值: %s", app.pageInputData.ComboboxField))
-						ui.Text(c, fmt.Sprintf("选择的令牌值: %+v", app.pageInputData.TokensField))
-
-					})
-
-				items := []string{"go", "python", "dotnet", "java", "javascript", "rust"}
-				ui.Text(c, "Combobox")
-				ui.Combobox(c, &app.pageInputData.ComboboxField, items)
-
-				ui.Text(c, "Select")
-				ui.Select(c, &app.pageInputData.ComboboxField, items)
-
-				ui.Text(c, "TokenField")
-				ui.TokenField(c, &app.pageInputData.TokensField, items)
 			})
 
 		ui.Divider(c)
