@@ -54,7 +54,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          VERSION="${GITHUB_REF_NAME#v}"
           gh release create "$GITHUB_REF_NAME" \
-            --title "$GITHUB_REF_NAME" \
+            --title "${VERSION}" \
             --notes "${{ steps.changelog.outputs.changelog }}" \
             dist/windows-amd64/*-setup-*-amd64.exe
