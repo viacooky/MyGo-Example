@@ -28,6 +28,15 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y nsis
+      
+      - name: Update version in mygo.json
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          echo "Setting version to $VERSION in mygo.json"
+          
+          jq --arg v "$VERSION" '.version = $v' mygo.json > tmp.json && mv tmp.json mygo.json
+          
+          echo "mygo.json 当前版本: $(jq -r '.version' mygo.json)"
 
       # 只构建 Windows 产物
       - name: Build with MyGo

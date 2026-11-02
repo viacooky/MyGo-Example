@@ -42,4 +42,5 @@ changelog:
 release:
   draft: false
   prerelease: auto
-  name_template: "{{.ProjectName}} v{{.Version}}"
+  extra_files:
+    - glob: dist/windows-amd64/*-setup-*-amd64.exe
