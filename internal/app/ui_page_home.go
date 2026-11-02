@@ -55,10 +55,8 @@ func (app *app) pageHome(c *ui.Context) {
 			ColumnTracks(ui.FitContent(), ui.Fr(1)).
 			AlignItems(ui.Baseline).
 			Children(func() {
-				ui.Text(c, "关于").FontSize(16).Bold()
-				ui.Column(c).Margin(PageTitleBarMargin).Children(func() {
-					ui.Text(c, "MyGo 组件示例应用，演示各组件的用法。")
-				})
+				ui.Text(c, "关于")
+				ui.Text(c, "MyGo 组件示例应用，演示各组件的用法。")
 
 				ui.Text(c, "mygo 版本")
 				ui.Text(c, mygoVersion())
@@ -67,7 +65,7 @@ func (app *app) pageHome(c *ui.Context) {
 				ui.Link(c, "github.com/egoist/mygo", "https://github.com/egoist/mygo")
 
 				ui.Text(c, "项目")
-				ui.Link(c, "github.com/viacooky/mygo-lean", "https://github.com/viacooky/mygo-lean")
+				ui.Link(c, "github.com/viacooky/MyGo-Example", "https://github.com/viacooky/MyGo-Example")
 			})
 	})
 }
