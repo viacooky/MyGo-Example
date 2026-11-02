@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -42,10 +42,14 @@ jobs:
       - name: Build with MyGo
         run: |
           go tool mygo build -platform windows/amd64
+          echo "=== Listing dist/ ==="
+          ls -R dist/
+          ls -la dist/windows-amd64/
+          find dist/windows-amd64/ -name "*-setup-*-amd64.exe"
 
       # GoReleaser 发布
       - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v6
+        uses: goreleaser/goreleaser-action@v7
         with:
           distribution: goreleaser
           version: "~> v2"
