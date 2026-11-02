@@ -42,18 +42,12 @@ jobs:
       - name: Build with MyGo
         run: |
           go tool mygo build -platform windows/amd64
-          echo "=== Listing dist/ ==="
-          ls -R dist/
-          ls -la dist/windows-amd64/
-          find dist/windows-amd64/ -name "*-setup-*-amd64.exe"
 
-      # GoReleaser 发布
-      - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v7
-        with:
-          distribution: goreleaser
-          version: "~> v2"
-          # 跳过校验，因为修改了版本号，需要跳过GoReleaser校验
-          args: release --clean --skip=validate
+      - name: Create Release with Auto Notes
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            --generate-notes \
+            --title "MyGo-Example $GITHUB_REF_NAME" \
+            dist/windows-amd64/*-setup-*-amd64.exe
