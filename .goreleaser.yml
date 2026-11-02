@@ -3,8 +3,7 @@ version: 2
 builds:
   - skip: true
 
-archives:
-  - skip: true
+archives: []
 
 checksum:
   name_template: "checksums.txt"
